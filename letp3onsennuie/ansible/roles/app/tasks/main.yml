@@ -1,0 +1,26 @@
+- name: Run Backend API
+  docker_container:
+    name: "{{ API_CONTAINER }}" 
+    image: primplouf/dockercourse-backendapi:latest
+    networks:
+      - name: "{{ NETWORK }}" 
+    env:
+      POSTGRES_CONTAINER: "{{ POSTGRES_CONTAINER }}" 
+      POSTGRES_DB: "{{ POSTGRES_DB }}" 
+      POSTGRES_USER: "{{ POSTGRES_USER }}" 
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+    recreate: true
+    pull: true
+- name: Run Backend API second column
+  docker_container:
+    name: "{{ API_CONTAINER_2 }}" 
+    image: primplouf/dockercourse-backendapi:latest
+    networks:
+      - name: "{{ NETWORK }}" 
+    env:
+      POSTGRES_CONTAINER: "{{ POSTGRES_CONTAINER }}" 
+      POSTGRES_DB: "{{ POSTGRES_DB }}" 
+      POSTGRES_USER: "{{ POSTGRES_USER }}" 
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+    recreate: true
+    pull: true

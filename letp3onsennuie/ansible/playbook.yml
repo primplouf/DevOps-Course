@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: false
+  become: true
+  vars_files:
+    - group_vars/all-vault.yml
+
+  roles:
+    - docker
+    - network
+    - database
+    - app
+    - proxy
+    - front

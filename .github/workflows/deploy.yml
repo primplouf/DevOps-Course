@@ -1,0 +1,33 @@
+name: CI/CD devops 2023 - Deploy
+
+# Déclencher le workflow si les images dockers sont mises à jour
+on:
+  workflow_run:
+    workflows: ["CI devops 2023 - Docker"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy_ansible:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: playbook.yml
+          key: ${{secrets.ANSIBLE_SSH_KEY}}
+          directory: ./letp3onsennuie/ansible/
+          inventory: |
+            [all]
+            steven.arnaud.takima.cloud
+          # Mot de passe chiffré pour le vault, afin d'accéder aux variables d'environnement du vault sans risque.  
+          vault_password: ${{secrets.ANSIBLE_VAULT_PASSWORD}}
+          options: |
+            -u${{secrets.ANSIBLE_USER}}

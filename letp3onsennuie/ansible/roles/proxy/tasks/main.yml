@@ -1,0 +1,14 @@
+- name: Run HTTPD
+  docker_container:
+    name: httpd
+    image: primplouf/dockercourse-httpd:latest
+    networks:
+      - name: "{{ NETWORK }}" 
+    ports:
+      - 8080:80
+    env:
+      API_URL: "{{ API_CONTAINER }}"
+      API_URL_2: "{{ API_CONTAINER_2 }}" 
+    recreate: true
+    pull: true
+    

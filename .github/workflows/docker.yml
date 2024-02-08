@@ -1,0 +1,55 @@
+name: CI devops 2023 - Docker
+
+# Déclencher le workflow lors d'un push sur la branche principale
+on:
+    workflow_run:
+        workflows: ["CI devops 2023 - Sonar"]
+        types:
+            - completed
+        branches:
+            - main
+
+jobs:
+  build-and-push-docker-image:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+    steps:
+      # Vérifier le code, afin que le workflow puisse y accéder. Le mot-clé 'uses' indique que la GitHub Action qui suit va être réalisée dans la version précisée.
+      - name: Checkout code
+        uses: actions/checkout@v2.5.0
+
+      # Se connecter à DockerHub en utilisant le nom d'utilisateur et le jeton. Ces variables sont stockées en secret pour ne pas être affichées sur la trace de la pipeline
+      # Cette étape est indispensable pour pousser les images sur DockerHub
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build les images et les pousse sur DockerHub. Les images sont construites à partir des fichiers Dockerfile présents dans les répertoires associés
+      # Les images ne sont poussées que s'il s'agit de la branche main  
+      # Il s'agit du même processus pour toutes les images. Les spécificités sont précisées à la GitHub Action au sein de la section 'with'
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./letp1onsennuie/backendapi/simple-api-student-main/
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-backendapi:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ./letp1onsennuie/postgres/
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-postgres:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ./letp1onsennuie/httpd/
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push front
+        uses: docker/build-push-action@v3
+        with:
+          context: ./letp3onsennuie/devops-front-main/
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-frontend:latest
+          push: ${{ github.ref == 'refs/heads/main' }}

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+    backend:
+        container_name: backend
+        image: dockercourse/backendapi
+        build: './backendapi/simple-api-student-main/'
+        env_file: .env
+        networks:
+          - my-network
+        depends_on:
+          - database
+
+    database:
+        container_name: database
+        image: dockercourse/postgres
+        build: './postgres'
+        env_file: .env
+        volumes:
+          - myvolume:/var/lib/postgresql/data
+        networks:
+          - my-network
+
+    httpd:
+        container_name: httpd
+        image: dockercourse/httpd
+        build: './httpd'
+        ports:
+          - 80:80
+        networks:
+          - my-network
+        depends_on:
+          - backend
+
+networks:
+    my-network:
+
+volumes:
+    myvolume:
