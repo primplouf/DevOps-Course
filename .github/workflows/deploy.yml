@@ -23,7 +23,7 @@ jobs:
         with:
           playbook: playbook.yml
           key: ${{secrets.ANSIBLE_SSH_KEY}}
-          directory: ./letp3onsennuie/ansible/
+          directory: ./TP3/ansible/
           inventory: |
             [all]
             steven.arnaud.takima.cloud

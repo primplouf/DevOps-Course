@@ -1,3 +1,3 @@
-- [TP1](letp1onsennuie/README.md)
-- [TP2](letp2onsennuie/README.md)
-- [TP3](letp3onsennuie/README.md)
+- [TP1](TP1/README.md)
+- [TP2](TP2/README.md)
+- [TP3](TP3/README.md)

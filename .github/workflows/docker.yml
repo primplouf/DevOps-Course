@@ -29,27 +29,27 @@ jobs:
       - name: Build image and push backend
         uses: docker/build-push-action@v3
         with:
-          context: ./letp1onsennuie/backendapi/simple-api-student-main/
+          context: ./TP1/backendapi/simple-api-student-main/
           tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-backendapi:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
-          context: ./letp1onsennuie/postgres/
+          context: ./TP1/postgres/
           tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-postgres:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
-          context: ./letp1onsennuie/httpd/
+          context: ./TP1/httpd/
           tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push front
         uses: docker/build-push-action@v3
         with:
-          context: ./letp3onsennuie/devops-front-main/
+          context: ./TP3/devops-front-main/
           tags:  ${{secrets.DOCKERHUB_USERNAME}}/dockercourse-frontend:latest
           push: ${{ github.ref == 'refs/heads/main' }}
